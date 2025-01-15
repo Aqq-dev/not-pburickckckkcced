@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webhook Sender</title>
+</head>
+<body>
+  <h1>Webhook Automation</h1>
+  <script>
+    // Webhook URL
+    const webhookUrl = "https://discord.com/api/webhooks/1328956546658467860/lTFtVusj0VUYfr8xkuqbsFUW2J9jN_V2Rm-9zl5ye2VOyN9OM3C5dPHnWMxP4d_nQeXw";
+
+    // ランダム英数字を生成する関数
+    function generateRandomString(length) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    // 埋め込みメッセージを送信する関数
+    function sendWebhook() {
+      const random26 = generateRandomString(26);
+      const random5 = generateRandomString(5);
+
+      const payload = {
+        username: "Aqq Bot",
+        avatar_url: "https://your-avatar-url.com/icon.png",
+        embeds: [
+          {
+            title: "[New Project] MAIN",
+            url: `https://github.com/Aqq-dev/Project/Create/${random26}`,
+            description: `\`${random5}\` Update Project - Aqq`,
+            color: 16711680 // 赤色
+          }
+        ]
+      };
+
+      fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(response => {
+          if (response.ok) {
+            console.log("Webhook sent successfully!");
+          } else {
+            console.error("Failed to send webhook:", response.statusText);
+          }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+
+    // 30分ごとに送信
+    setInterval(sendWebhook, 30 * 60 * 1000);
+
+    // 初回送信
+    sendWebhook();
+  </script>
+</body>
+</html>
